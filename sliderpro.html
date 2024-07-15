@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slider 3D tipo Ruleta</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: #000;
+            margin: 0;
+        }
+
+        #carousel {
+            width: 600px;
+            height: 400px;
+            position: relative;
+            perspective: 1000px;
+            margin-bottom: 20px; /* Espacio entre el carrusel y los controles */
+        }
+
+        .carousel-item {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            transform-origin: center center -300px;
+            transition: transform 1s, z-index 0.5s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .carousel-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border: 5px solid #fff;
+            box-shadow: 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #fff, 0 0 50px #fff;
+            position: relative;
+            transition: transform 1s, z-index 0.5s;
+        }
+
+        #controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            z-index: 2; /* Asegura que los controles estén por encima de las imágenes */
+        }
+
+        #prev, #next {
+            background: rgba(255, 255, 255, 0.7);
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 1.2em;
+            margin: 100px 10px 0 10px;
+            transition: background 0.3s;
+        }
+
+        #prev:hover, #next:hover {
+            background: rgba(255, 255, 255, 1);
+        }
+    </style>
+</head>
+<body>
+    <div id="carousel">
+        <div class="carousel-item">
+            <img src="./img/0.webp" alt="Imagen 1">
+        </div>
+        <div class="carousel-item">
+            <img src="./img/1.webp" alt="Imagen 2">
+        </div>
+        <div class="carousel-item">
+            <img src="./img/2.webp" alt="Imagen 3">
+        </div>
+        <div class="carousel-item">
+            <img src="./img/3.webp" alt="Imagen 4">
+        </div>
+        <div class="carousel-item">
+            <img src="./img/4.webp" alt="Imagen 1">
+        </div>
+        <div class="carousel-item">
+            <img src="./img/5.webp" alt="Imagen 2">
+        </div>
+        <div class="carousel-item">
+            <img src="./img/6.webp" alt="Imagen 3">
+        </div>
+        <div class="carousel-item">
+            <img src="./img/7.webp" alt="Imagen 4">
+        </div>
+        <div class="carousel-item">
+            <img src="./img/8.webp" alt="Imagen 4">
+        </div>
+        <div class="carousel-item">
+            <img src="./img/9.jpg" alt="Imagen 4">
+        </div>
+        <div class="carousel-item">
+            <img src="./img/10.webp" alt="Imagen 4">
+        </div>
+        <div class="carousel-item">
+            <img src="./img/11.webp" alt="Imagen 4">
+        </div>
+    </div>
+    <div id="controls">
+        <button id="prev">&lt;</button>
+        <button id="next">&gt;</button>
+    </div>
+
+    <script>
+        const items = document.querySelectorAll('.carousel-item');
+        const prevButton = document.getElementById('prev');
+        const nextButton = document.getElementById('next');
+        const itemCount = items.length;
+        let angle = 0;
+
+        function updateCarousel() {
+            items.forEach((item, index) => {
+                const itemAngle = (index * 360 / itemCount) + angle;
+                item.style.transform = `rotateY(${itemAngle}deg) translateZ(300px)`;
+
+                // Calcular el z-index
+                const normalizedAngle = (itemAngle % 360 + 360) % 360;
+                let zIndex = Math.cos(normalizedAngle * Math.PI / 180) * 100;
+                if (zIndex < 0) zIndex = 0; // Asegurar que el z-index no sea negativo
+                item.style.zIndex = Math.floor(zIndex);
+            });
+        }
+
+        prevButton.addEventListener('click', () => {
+            angle -= 360 / itemCount;
+            updateCarousel();
+        });
+
+        nextButton.addEventListener('click', () => {
+            angle += 360 / itemCount;
+            updateCarousel();
+        });
+
+        // Initial update
+        updateCarousel();
+    </script>
+</body>
+</html>
